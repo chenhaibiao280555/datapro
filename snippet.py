@@ -9,7 +9,9 @@ import time
 # el_cont[2][5]=1
 # print(el_cont)
 
-app = Origin.Application()
-app.NewProject()
-app.Visible = 1
-time.sleep(5)
+# app = Origin.Application()
+# app.NewProject()
+# app.Visible = 1
+# time.sleep(5)
+
+print("zf.text$=\"\\b(%(?Z))\"")
