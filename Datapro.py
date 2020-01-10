@@ -28,73 +28,103 @@ class App(tk.Frame):
         self.resistance = StringVar()
         self.benchmark = StringVar()
         self.overpotent = StringVar()
+        self.X_title = StringVar()
+        self.Y_title = StringVar()
+        self.set_normalized = IntVar()
         self.create_widgets()
 
     def create_widgets(self):
         self.folder = tk.Entry(self, textvariable=self.data_folder, width=20)
         self.folder.grid(row=0, column=0, columnspan=2)
+
         self.browse = tk.Button(self)
         self.browse["text"] = "选择数据目录..."
         self.browse["command"] = self.select_folder
         self.browse.grid(row=0, column=2)
+
         self.comp_label = tk.Label(self, text="沉积文件序号")
         self.comp_label.grid(row=1, column=0)
         self.comp_order_input = tk.Entry(
             self, textvariable=self.comp_order, width=5)
         self.comp_order_input.grid(row=1, column=1)
-        self.comp_label = tk.Label(self, text="测试文件序号")
-        self.comp_label.grid(row=2, column=0)
+
+        self.import_button = tk.Button(self)
+        self.import_button["text"] = "导入数据"
+        self.import_button["width"] = 12
+        self.import_button["command"] = self.import_data
+        self.import_button.grid(row=1, column=2)
+
+        self.test_label = tk.Label(self, text="测试文件序号")
+        self.test_label.grid(row=2, column=0)
         self.test_order_input = tk.Entry(
             self, textvariable=self.test_order, width=5)
         self.test_order_input.grid(row=2, column=1)
-        self.process = tk.Button(self)
-        self.process["text"] = "导入数据"
-        self.process["width"] = 12
-        self.process["command"] = self.import_data
-        self.process.grid(row=1, column=2)
+
+        self.check_normalized = tk.Checkbutton(self, variable=self.set_normalized)
+        self.check_normalized["text"] = "组分归一化"
+        self.check_normalized.grid(row=2,column=2)
+
+        self.X_title_label = tk.Label(self, text="横轴标题")
+        self.X_title_label.grid(row=3, column=0)
+        self.X_title_input = tk.Entry(
+            self, textvariable=self.X_title, width=15)
+        self.X_title_input.grid(row=3, column=1, columnspan = 2)
+
+        self.Y_title_label = tk.Label(self, text="纵轴标题")
+        self.Y_title_label.grid(row=4, column=0)
+        self.Y_title_input = tk.Entry(
+            self, textvariable=self.Y_title, width=15)
+        self.Y_title_input.grid(row=4, column=1, columnspan = 2)
+
+        self.benchmark_label = tk.Label(self, text="性能比较线")
+        self.benchmark_label.grid(row=5, column=0, sticky = "w")
+        self.benchmark_input = tk.Entry(
+            self, textvariable=self.benchmark, width=5)
+        self.benchmark_input.grid(row=5, column=1)
+        self.benchmark_label2 = tk.Label(self, text="mA （注意正负）", anchor="w")
+        self.benchmark_label2.grid(row=5, column=2, sticky = "w")
+
+        self.overpotent_label = tk.Label(self, text="过电势计算")
+        self.overpotent_label.grid(row=6, column=0, sticky = "w")
+        self.overpotent_input = tk.Entry(
+            self, textvariable=self.overpotent, width=5)
+        self.overpotent_input.grid(row=6, column=1)
+        self.overpotent_label = tk.Label(self, text="V", anchor="w")
+        self.overpotent_label.grid(row=6, column=2, sticky = "w")
+
 
         self.plot = tk.Button(self)
         self.plot["text"] = "作图"
         self.plot["width"] = 12
         self.plot["command"] = self.plot_data
-        self.plot.grid(row=2, column=2)
+        self.plot.grid(row=7, column=1)
 
-        self.benchmark_label = tk.Label(self, text="性能比较线")
-        self.benchmark_label.grid(row=3, column=0, sticky = "w")
-        self.benchmark_input = tk.Entry(
-            self, textvariable=self.benchmark, width=5)
-        self.benchmark_input.grid(row=3, column=1)
-        self.benchmark_label2 = tk.Label(self, text="mA （注意正负）", anchor="w")
-        self.benchmark_label2.grid(row=3, column=2, sticky = "w")
-
-        self.overpotent_label = tk.Label(self, text="过电势计算")
-        self.overpotent_label.grid(row=4, column=0, sticky = "w")
-        self.overpotent_input = tk.Entry(
-            self, textvariable=self.overpotent, width=5)
-        self.overpotent_input.grid(row=4, column=1)
-        self.overpotent_label = tk.Label(self, text="V", anchor="w")
-        self.overpotent_label.grid(row=4, column=2, sticky = "w")
-
+        self.closeapp = tk.Button(self)
+        self.closeapp["text"] = "退出Origin"
+        self.closeapp["width"] = 12
+        self.closeapp["command"] = self.close_app
+        self.closeapp.grid(row=7, column=2)
+        
         self.check_correct = tk.Checkbutton(self, variable=self.set_correct)
         self.check_correct["text"] = "修正原始数据"
-        self.check_correct.grid(row=5,column=0)
+        self.check_correct.grid(row=8,column=0)
 
         self.area_label = tk.Label(self, text="电极面积")
-        self.area_label.grid(row=6, column=0, sticky = "w")
+        self.area_label.grid(row=9, column=0, sticky = "w")
         self.area_input = tk.Entry(
             self, textvariable=self.area, width=5)
-        self.area_input.grid(row=6, column=1)
+        self.area_input.grid(row=9, column=1)
         self.area_label2 = tk.Label(self, text="平方厘米", anchor="w")
-        self.area_label2.grid(row=6, column=2, sticky = "w")
+        self.area_label2.grid(row=9, column=2, sticky = "w")
 
         
         self.resist_label = tk.Label(self, text="电解液电阻")
-        self.resist_label.grid(row=7, column=0, sticky = "w")
+        self.resist_label.grid(row=10, column=0, sticky = "w")
         self.resist_input = tk.Entry(
             self, textvariable=self.resistance, width=5)
-        self.resist_input.grid(row=7, column=1)
+        self.resist_input.grid(row=10, column=1)
         self.resist_label2 = tk.Label(self, text="欧姆", anchor="w")
-        self.resist_label2.grid(row=7, column=2, sticky = "w")
+        self.resist_label2.grid(row=10, column=2, sticky = "w")
 
 
 
@@ -114,11 +144,17 @@ class App(tk.Frame):
         self.resistance.set("2")
         self.benchmark.set("10")
         self.overpotent.set("0")
+        self.set_correct.set(1)
+        self.X_title.set("Voltage (V vs.)")
+        self.Y_title.set("Current (A)")
 
     def select_folder(self):
         self.data_folder.set(filedialog.askdirectory())
         print(self.data_folder.get())
         return
+
+    def close_app(self):
+        self.oapp.Exit()
 
     def import_data(self):
         # file_names = []
@@ -131,9 +167,9 @@ class App(tk.Frame):
         # files.sort(key=lambda x: os.path.getmtime(x))
         # print(files)
         # print(len(files))
-        self.process["text"] = "正在导入数据..."
-        self.process["state"] = "disabled"
-        self.process.update()
+        self.import_button["text"] = "正在导入数据..."
+        self.import_button["state"] = "disabled"
+        self.import_button.update()
 
         self.oapp = Origin.Application()
         self.oapp.NewProject()
@@ -157,9 +193,7 @@ class App(tk.Frame):
         previous = 0
         expset = 0
         i = 0
-        # datasheet.PutCols(66)
-        # print(datasheet.Columns)
-        # print(len(datasheet.Columns))
+
         tech = ""
         el_info = ""
         mark_x = []
@@ -185,6 +219,7 @@ class App(tk.Frame):
                     csvreader = csv.reader(csvfile)
                     el_infoline = 0
                     el_info = []
+                    totalcont = 0
                     for row in csvreader:
                         if row[0].lstrip('-').replace('.', '', 1).isdigit():
                             break
@@ -192,12 +227,20 @@ class App(tk.Frame):
                             el_name = row[0][:2]
                             if el_name not in el_list:
                                 el_list.append(el_name)
+                            if self.set_normalized.get() == 1:
+                                totalcont += float(row[1])
                             el_info.append(el_name + ":" + row[1])
                         elif "电解液" in row[0]:
                             el_infoline = csvreader.line_num + 1
+                    if self.set_normalized.get() == 1:
+                        normalized_el_info = []
+                        for el in el_info:
+                            info = el.split(":")
+                            normal_cont = round(float(info[1])/totalcont,2)
+                            normalized_el_info.append(info[0] + ":" + str(normal_cont))
+                        el_info = normalized_el_info
                     el_infos.append(el_info)
 
-            # print(str.split(str.split(file.name,'.')[1],']')[0]+":::"+datetime.fromtimestamp(os.path.getmtime(file)).strftime('%Y-%m-%d %H:%M:%S'))
             if str(expset) == self.test_order.get():
                 x, y, data = [], [], []
                 cx, cy, cdata = [], [], [] #修正后的数据
@@ -215,14 +258,7 @@ class App(tk.Frame):
                         if startrow > 0:
                             x.append(float(row[0]))
                             y.append(float(row[1]))
-                            # if float(row[0]) > self.x_max:
-                            #     self.x_max=float(row[0])
-                            # if float(row[0]) < self.x_min:
-                            #     self.x_min=float(row[0])
-                            # if float(row[1]) > self.y_max:
-                            #     self.y_max=float(row[1])
-                            # if float(row[1]) < self.y_min:
-                            #     self.y_min=float(row[1])
+
                             if self.set_correct.get() == 1:
                                 cx.append(float(row[0])-float(row[1])*resist+overpot)
                                 cy.append(float(row[1])/area)
@@ -233,14 +269,7 @@ class App(tk.Frame):
                             if self.set_correct.get() == 1:
                                 cx.append(float(row[0])-float(row[1])*resist+overpot)
                                 cy.append(float(row[1])/area)
-                            # if float(row[0]) > self.x_max:
-                            #     self.x_max=float(row[0])
-                            # if float(row[0]) < self.x_min:
-                            #     self.x_min=float(row[0])
-                            # if float(row[1]) > self.y_max:
-                            #     self.y_max=float(row[1])
-                            # if float(row[1]) < self.y_min:
-                            #     self.y_min=float(row[1])
+
                 data.append(x)
                 data.append(y)
                 
@@ -264,11 +293,6 @@ class App(tk.Frame):
                     j -= 1
                 mark=x[j] + (x[j]-x[j-1]) / (y[j]-y[j-1])*(bench-y[j])
                 mark_x.append(mark)
-                # if mark > self.mark_x_max:
-                #     self.mark_x_max = mark
-                # if mark < self.mark_x_min:
-                #     self.mark_x_min = mark
-                # print(y[j])
 
                 # datasheet.Columns(i+1).SetName("I")#Name属性不可更改
                 self.datasheet.SetData(data, 0, i)
@@ -281,8 +305,8 @@ class App(tk.Frame):
                 self.datasheet.Columns(i).Comments=current
                 self.datasheet.Columns(
                     i+1).Comments=("".join(el_info)).replace(":", "")
-                self.datasheet.Columns(i).LongName="Voltage"
-                self.datasheet.Columns(i+1).LongName="Current"
+                self.datasheet.Columns(i).LongName=self.X_title.get()
+                self.datasheet.Columns(i+1).LongName=self.Y_title.get()
 
                 if self.set_correct.get() == 1:
                     self.cdatasheet.SetData(cdata, 0, i)
@@ -295,16 +319,12 @@ class App(tk.Frame):
                     self.cdatasheet.Columns(i).Comments=current
                     self.cdatasheet.Columns(
                         i+1).Comments=("".join(el_info)).replace(":", "")
-                    self.cdatasheet.Columns(i).LongName="Voltage"
-                    self.cdatasheet.Columns(i+1).LongName="Current"
+                    self.cdatasheet.Columns(i).LongName=self.X_title.get()
+                    self.cdatasheet.Columns(i+1).LongName=self.Y_title.get()
 
                 i += 2
             previous=current
-        # self.oapp.Exit()
-        # self.x_max = round_up(self.x_max,1)
-        # self.x_min = round_down(self.x_min,1)
-        # self.y_max = round_up(self.y_max,1)
-        # self.y_min = round_down(self.y_min,1)
+
         if self.x_max < self.x_min:
             temp = self.x_max
             self.x_max = self.x_min
@@ -351,9 +371,10 @@ class App(tk.Frame):
             self.ternarysheet.Columns(4).LongName=f"修正电势 at {self.benchmark_input.get()} mA"
 
         # self.ternarysheet.Columns()
-        self.process["state"]="normal"
-        self.process["text"]="导入数据"
-        self.process.update()
+        self["state"]="normal"
+        self.import_button["state"]="normal"
+        self.import_button["text"]="导入数据"
+        self.import_button.update()
         self.datasheet.PutLabelVisible(Origin.LABEL_COMMENTS)
         self.datasheet.PutLabelVisible(Origin.LABEL_LONG_NAME)
         self.datasheet.Name += tech
