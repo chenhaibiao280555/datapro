@@ -34,7 +34,7 @@ class App(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.folder = tk.Entry(self, textvariable=self.data_folder, width=20)
+        self.folder = tk.Entry(self, textvariable=self.data_folder)
         self.folder.grid(row=0, column=0, columnspan=2)
 
         self.browse = tk.Button(self)
@@ -67,13 +67,13 @@ class App(tk.Frame):
         self.X_title_label = tk.Label(self, text="横轴标题")
         self.X_title_label.grid(row=3, column=0)
         self.X_title_input = tk.Entry(
-            self, textvariable=self.X_title, width=15)
+            self, textvariable=self.X_title)
         self.X_title_input.grid(row=3, column=1, columnspan = 2)
 
         self.Y_title_label = tk.Label(self, text="纵轴标题")
         self.Y_title_label.grid(row=4, column=0)
         self.Y_title_input = tk.Entry(
-            self, textvariable=self.Y_title, width=15)
+            self, textvariable=self.Y_title)
         self.Y_title_input.grid(row=4, column=1, columnspan = 2)
 
         self.benchmark_label = tk.Label(self, text="性能比较线")
@@ -371,7 +371,6 @@ class App(tk.Frame):
             self.ternarysheet.Columns(4).LongName=f"修正电势 at {self.benchmark_input.get()} mA"
 
         # self.ternarysheet.Columns()
-        self["state"]="normal"
         self.import_button["state"]="normal"
         self.import_button["text"]="导入数据"
         self.import_button.update()
